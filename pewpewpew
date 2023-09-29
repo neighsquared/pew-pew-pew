@@ -1,0 +1,89 @@
+#include <raylib.h>
+
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
+
+int main() {
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Pew Pew Pew");
+
+    // player variables
+    float circleRadius = 40.0f;
+    Vector2 circlePosition = {(float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2};
+    float circleSpeed = 300.0f;
+
+    // bullet variables
+    float bulletRadius = 10.0f;
+    Vector2 bulletPosition = circlePosition;
+    float bulletSpeed = 500.0f;
+    bool canShoot = true;
+    float shootCooldown = 1.0f;
+    float elapsedCooldown = 0.0f;
+
+    while (!WindowShouldClose()) {
+        float deltaTime = GetFrameTime();
+
+        // pew pew pew (bullet shooting)
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && canShoot) {
+            bulletPosition = circlePosition;
+            if (IsKeyDown(KEY_W)) {
+                bulletPosition.y -= bulletSpeed * deltaTime;
+            } 
+            if (IsKeyDown(KEY_S)) {
+                bulletPosition.y += bulletSpeed * deltaTime;
+            } 
+            if (IsKeyDown(KEY_A)) {
+                bulletPosition.x -= bulletSpeed * deltaTime;
+            } 
+            if (IsKeyDown(KEY_D)) {
+                bulletPosition.x += bulletSpeed * deltaTime;
+            }
+
+            canShoot = false;
+            elapsedCooldown = 0.0f;
+        }
+
+        // cooldown stuff
+        if (!canShoot) {
+            elapsedCooldown += deltaTime;
+            if (elapsedCooldown >= shootCooldown) {
+                canShoot = true;
+            }
+        }
+
+        // update bullet position
+        if (!canShoot) {
+            bulletPosition.y -= bulletSpeed * deltaTime;
+        }
+
+        // player movement
+        if (IsKeyDown(KEY_W)) {
+            circlePosition.y -= circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_S)) {
+            circlePosition.y += circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_A)) {
+            circlePosition.x -= circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_D)) {
+            circlePosition.x += circleSpeed * deltaTime;
+        }
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        DrawCircleV(circlePosition, circleRadius, BLUE);
+
+        // draw bullet if shooting
+        if (!canShoot) {
+            DrawCircleV(bulletPosition, bulletRadius, RED);
+        }
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
+}
