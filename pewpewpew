@@ -22,7 +22,21 @@ int main() {
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
 
-        // pew pew pew (bullet shooting)
+        // player movement
+        if (IsKeyDown(KEY_W)) {
+            circlePosition.y -= circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_S)) {
+            circlePosition.y += circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_A)) {
+            circlePosition.x -= circleSpeed * deltaTime;
+        }
+        if (IsKeyDown(KEY_D)) {
+            circlePosition.x += circleSpeed * deltaTime;
+        }
+
+                // pew pew pew (bullet shooting)
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && canShoot) {
             bulletPosition = circlePosition;
             if (IsKeyDown(KEY_W)) {
@@ -55,20 +69,6 @@ int main() {
             bulletPosition.y -= bulletSpeed * deltaTime;
         }
 
-        // player movement
-        if (IsKeyDown(KEY_W)) {
-            circlePosition.y -= circleSpeed * deltaTime;
-        }
-        if (IsKeyDown(KEY_S)) {
-            circlePosition.y += circleSpeed * deltaTime;
-        }
-        if (IsKeyDown(KEY_A)) {
-            circlePosition.x -= circleSpeed * deltaTime;
-        }
-        if (IsKeyDown(KEY_D)) {
-            circlePosition.x += circleSpeed * deltaTime;
-        }
-
         BeginDrawing();
 
         ClearBackground(BLACK);
@@ -82,6 +82,11 @@ int main() {
 
         EndDrawing();
     }
+
+    CloseWindow();
+
+    return 0;
+}
 
     CloseWindow();
 
